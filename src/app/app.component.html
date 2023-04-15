@@ -1,33 +1,45 @@
-
-
 <style>
-.header-container {
-  background-color: #f1f1f1;
-  padding: 20px;
-  text-align: center;
-  font-size: 20px;
-  color: #000;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
+  .header-container {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
+    font-size: 20px;
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 
-.main-container {
-  margin: 0 auto;
-  width: 100%;
-  max-width: 800px;
-  padding: 0 20px;
-}
+  .main-container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 800px;
+    padding: 0 20px;
+  }
 
+#pdfContainer {
+    border: 1px solid #ccc;
+  }
 
+  #footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
 </style>
 
 
 
+
 <div class="main-container">
-  <div class="header-container" >
+  <div class="header-container">
     <h4>PDF JS Angular 8 Demo </h4>
-  </div>  
-<div id="pdfContainer" ></div>
- 
+  </div>
+
+  <div id="footer">
+    <button id="download">Download</button>
+
+  </div>
+  <div id="pdfContainer"></div>
+
 
 </div>
