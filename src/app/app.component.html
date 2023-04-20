@@ -16,8 +16,8 @@
     padding: 0 20px;
   }
 
-#pdfContainer {
-    border: 1px solid #ccc;
+#viewerContainer {
+    position: absolute;
   }
 
   #footer {
@@ -35,11 +35,9 @@
     <h4>PDF JS Angular 8 Demo </h4>
   </div>
 
-  <div id="footer">
-    <button id="download">Download</button>
-
+ 
+ <div id="viewerContainer">
+    <div id="viewer" class="pdfViewer"></div>
   </div>
-  <div id="pdfContainer"></div>
-
 
 </div>

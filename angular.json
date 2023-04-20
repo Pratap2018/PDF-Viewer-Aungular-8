@@ -25,12 +25,13 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/assets/pdf_viewer.css"
+              "src/assets/web/pdf_viewer.css"
             ],
             "scripts": [
-              "src/assets/pdf.js",
-              "src/assets/pdf_viewer.js",
-              "src/assets/pdf.worker.js"
+              "src/assets/build/pdf.js",
+              "src/assets/web/pdf_viewer.js",
+              "src/assets/build/pdf.worker.js",
+              "src/assets/build/pdf.sandbox.js"
             ]
           },
           "configurations": {
