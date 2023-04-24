@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ export class AppComponent {
   pdfDoc = null;
   forms = new Map();
   constructor(@Inject(DOCUMENT) document: Document) {
-    
+
     const SEARCH_FOR = "";
 
     // @ts-ignore
@@ -44,24 +45,31 @@ export class AppComponent {
 
 
 
-   
+
 
     (async function () {
+
+      // ussing pdf-lib a diffrent library to fill the form fields
       const formPdfBytes = await fetch('../assets/sample2.pdf').then(res => res.arrayBuffer())
       const emblemImageBytes = await fetch('../assets/Signature.png').then(res => res.arrayBuffer())
+      const emblemImageBytes1 = await fetch('../assets/hypersign.jpg').then(res => res.arrayBuffer())
 
-      const pdfDocLIB=await PDFDocument.load(formPdfBytes);
+      const pdfDocLIB = await PDFDocument.load(formPdfBytes);
+      const data = await pdfDocLIB.getForm().getField('the Effective Date by and between')
+      // @ts-ignore
+      data.setText('20')
+
 
       await pdfDocLIB.getForm().getButton('Signature-Image-4_af_image')
-      .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
+        .setImage(await pdfDocLIB.embedJpg(emblemImageBytes1))
       await pdfDocLIB.getForm().getButton('Signature-Image-1_af_image')
-      .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
+        .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
       await pdfDocLIB.getForm().getButton('Signature-Image-2_af_image')
-      .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
+        .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
       await pdfDocLIB.getForm().getButton('Signature-Image-3_af_image')
-      .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
-      const pdfDocBytes=await pdfDocLIB.saveAsBase64({dataUri:true})
-          // @ts-ignore
+        .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
+      const pdfDocBytes = await pdfDocLIB.saveAsBase64({ dataUri: true })
+      // @ts-ignore
 
       const loadingTask = pdfjsLib.getDocument({
         url: pdfDocBytes,
@@ -69,20 +77,21 @@ export class AppComponent {
         cMapPacked: true,
         enableXfa: true,
       });
-      
+
       loadingTask.promise.then(async function (pdfDocument) {
+
+
+
+
+
+
+        const page = await pdfDocument.getPage(1);
+        const annotations = await page.getAnnotations();
+        annotations[1].fieldValue = "Random Data";
+        annotations[3].fieldValue = "Random Client Name";
+
        
 
-
-        
-        
-        
-        const page=await pdfDocument.getPage(4);
-        const annotations=await page.getAnnotations();
-        annotations[1].fieldValue="Hello";
-console.log(annotations[20]);
-        
-        
 
         const container = document.getElementById("viewerContainer");
 
@@ -102,7 +111,8 @@ console.log(annotations[20]);
               },
             }
 
-          }});
+          }
+        });
         pdfLinkService.setViewer(pdfViewer);
         pdfScriptingManager.setViewer(pdfViewer);
 
