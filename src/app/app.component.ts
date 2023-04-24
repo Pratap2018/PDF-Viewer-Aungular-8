@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ export class AppComponent {
   pdfDoc = null;
   forms = new Map();
   constructor(@Inject(DOCUMENT) document: Document) {
+    
     const SEARCH_FOR = "";
 
     // @ts-ignore
@@ -42,16 +44,46 @@ export class AppComponent {
 
 
 
-    // @ts-ignore
-    const loadingTask = pdfjsLib.getDocument({
-      url: '../assets/sample2.pdf',
-      cMapUrl: '../assets/cmaps/',
-      cMapPacked: true,
-      enableXfa: true,
-    });
+   
 
-    (function () {
-      loadingTask.promise.then(function (pdfDocument) {
+    (async function () {
+      const formPdfBytes = await fetch('../assets/sample2.pdf').then(res => res.arrayBuffer())
+      const emblemImageBytes = await fetch('../assets/Signature.png').then(res => res.arrayBuffer())
+
+      const pdfDocLIB=await PDFDocument.load(formPdfBytes);
+
+      await pdfDocLIB.getForm().getButton('Signature-Image-4_af_image')
+      .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
+      await pdfDocLIB.getForm().getButton('Signature-Image-1_af_image')
+      .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
+      await pdfDocLIB.getForm().getButton('Signature-Image-2_af_image')
+      .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
+      await pdfDocLIB.getForm().getButton('Signature-Image-3_af_image')
+      .setImage(await pdfDocLIB.embedPng(emblemImageBytes))
+      const pdfDocBytes=await pdfDocLIB.saveAsBase64({dataUri:true})
+          // @ts-ignore
+
+      const loadingTask = pdfjsLib.getDocument({
+        url: pdfDocBytes,
+        cMapUrl: '../assets/cmaps/',
+        cMapPacked: true,
+        enableXfa: true,
+      });
+      
+      loadingTask.promise.then(async function (pdfDocument) {
+       
+
+
+        
+        
+        
+        const page=await pdfDocument.getPage(4);
+        const annotations=await page.getAnnotations();
+        annotations[1].fieldValue="Hello";
+console.log(annotations[20]);
+        
+        
+
         const container = document.getElementById("viewerContainer");
 
 
