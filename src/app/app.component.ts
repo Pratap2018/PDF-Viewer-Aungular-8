@@ -54,10 +54,13 @@ export class AppComponent {
       const emblemImageBytes = await fetch('../assets/Signature.png').then(res => res.arrayBuffer())
       const emblemImageBytes1 = await fetch('../assets/hypersign.jpg').then(res => res.arrayBuffer())
 
-      const pdfDocLIB = await PDFDocument.load(formPdfBytes);
+      const pdfDocLIB = await PDFDocument.load(formPdfBytes)
+
+        console.log(pdfDocLIB);
+        
+
       const data = await pdfDocLIB.getForm().getField('the Effective Date by and between')
       // @ts-ignore
-      data.setText('20')
 
 
       await pdfDocLIB.getForm().getButton('Signature-Image-4_af_image')
@@ -80,15 +83,15 @@ export class AppComponent {
 
       loadingTask.promise.then(async function (pdfDocument) {
 
-
-
+        
+        
 
 
 
         const page = await pdfDocument.getPage(1);
+        
         const annotations = await page.getAnnotations();
-        annotations[1].fieldValue = "Random Data";
-        annotations[3].fieldValue = "Random Client Name";
+     
 
        
 
